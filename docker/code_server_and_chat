@@ -1,0 +1,47 @@
+version: '2.0'
+services:
+  chatgpt-on-wechat:
+    image: zhayujie/chatgpt-on-wechat
+    volumes:
+      - chatgpt_app_volume:/app
+      - /volume2/docker/chatgpt/:/app/chatgpt
+      - /volume2/docker/chatgpt/config.json:/app/plugins/config.json
+    container_name: chatgpt-on-wechat
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      OPEN_AI_API_KEY: 'YOUR API KEY'
+      MODEL: ''
+      PROXY: ''
+      SINGLE_CHAT_PREFIX: '["wp", "@wp"]'
+      SINGLE_CHAT_REPLY_PREFIX: '"[wp] "'
+      GROUP_CHAT_PREFIX: '["@wp"]'
+      GROUP_NAME_WHITE_LIST: '["wplzy"]'
+      IMAGE_CREATE_PREFIX: '["画", "看", "找"]'
+      CONVERSATION_MAX_TOKENS: 1000
+      SPEECH_RECOGNITION: 'False'
+      CHARACTER_DESC: '你是基于大语言模型的AI智能助手，旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。'
+      EXPIRES_IN_SECONDS: 3600
+      USE_GLOBAL_PLUGIN_CONFIG: 'True'
+      USE_LINKAI: 'False'
+      LINKAI_API_KEY: ''
+      LINKAI_APP_CODE: ''
+      baidu_wenxin_secret_key: 'we4d7TRgjckUDUZSQvu2H8Nq6X99tm8x'
+      baidu_wenxin_api_key: 'NC16HT9mYMmP2z6otDkl07jK'
+  code-server:
+    image: codercom/code-server
+    ports:
+      - "2333:8080"
+    volumes:
+      - chatgpt_app_volume:/home/coder/project/chat-gpt
+      - /volume2/docker/coder/.config:/home/coder/.config
+      - /volume2/docker/coder/coder:/home/coder/project
+    container_name: code-server
+    user: "root:root"
+    environment:
+      - DOCKER_USER=root
+
+
+
+volumes:
+  chatgpt_app_volume:
